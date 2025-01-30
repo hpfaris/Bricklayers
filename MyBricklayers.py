@@ -67,7 +67,7 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
         if ";TYPE:External perimeter" in line or ";TYPE:Outer wall" in line:
             perimeter_type = "external"
             inside_perimeter_block = False
-            logging.info(f"External perimeter detected at layer {current_layer} and height {adjusted_z:.3f}")
+            logging.info(f"External perimeter detected at layer {current_layer} and height {current_z:.3f}")
         elif ";TYPE:Perimeter" in line or ";TYPE:Inner wall" in line:
             perimeter_type = "internal"
             inside_perimeter_block = False
