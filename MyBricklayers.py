@@ -40,7 +40,9 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
     logging.info("Starting G-code processing")
     logging.info(f"Input file: {input_file}")
     logging.info(f"Z-shift: {z_shift} mm, Layer height: {layer_height} mm")
-
+    prevCount = 0
+    num = 1
+	
     # Read the input G-code
     with open(input_file, 'r') as infile:
         lines = infile.readlines()
@@ -67,6 +69,9 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
         if ";TYPE:External perimeter" in line or ";TYPE:Outer wall" in line:
             perimeter_type = "external"
             inside_perimeter_block = False
+	    if perimeter_block_count % 2 != prevCount % 2 :
+		num = 0;
+	    prevCount = perimeter_block_count
             logging.info(f"External perimeter detected at layer {current_layer} and height {current_z:.3f}")
         elif ";TYPE:Perimeter" in line or ";TYPE:Inner wall" in line:
             perimeter_type = "internal"
@@ -86,7 +91,7 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
 
                 # Insert the corresponding Z height for this block
                 is_shifted = False  # Flag for whether this block is Z-shifted
-                if perimeter_block_count % 2 == 1:  # Apply Z-shift to odd-numbered blocks
+                if perimeter_block_count % 2 == num:  # Apply Z-shift to odd-numbered blocks
                     adjusted_z = current_z + z_shift
                     logging.info(f"Inserting G1 Z{adjusted_z:.3f} for shifted perimeter block #{perimeter_block_count}")
                     modified_lines.append(f"G1 Z{adjusted_z:.3f} ; Shifted Z for block #{perimeter_block_count}\n")
