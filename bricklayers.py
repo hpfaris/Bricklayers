@@ -34,7 +34,7 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
     current_layer = 0
     current_z = 0.0
     perimeter_type = None
-    perimeter_block_count = 0
+    perimeter_block_count = -1
     inside_perimeter_block = False
     z_shift = layer_height * 0.5
     logging.info("Starting G-code processing")
@@ -46,7 +46,7 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
         lines = infile.readlines()
 
     # Identify the total number of layers by looking for `G1 Z` commands
-    total_layers = sum(1 for line in lines if line.startswith("G1 Z")) - 1
+    total_layers = sum(1 for line in lines if line.startswith("G1 Z"))
 
     # Process the G-code
     modified_lines = []
