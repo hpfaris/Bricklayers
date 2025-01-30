@@ -69,8 +69,10 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
         if ";TYPE:External perimeter" in line or ";TYPE:Outer wall" in line:
             perimeter_type = "external"
             inside_perimeter_block = False
-	    if perimeter_block_count % 2 != prevCount % 2 :
-		num = 0;
+	    if (perimeter_block_count % 2) != (prevCount % 2):
+		num = 0
+	    else:
+		num = 1
 	    prevCount = perimeter_block_count
             logging.info(f"External perimeter detected at layer {current_layer} and height {current_z:.3f}")
         elif ";TYPE:Perimeter" in line or ";TYPE:Inner wall" in line:
