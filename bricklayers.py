@@ -34,7 +34,7 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
     current_layer = 0
     current_z = 0.0
     perimeter_type = None
-    perimeter_block_count = -1
+    perimeter_block_count = 0
     inside_perimeter_block = False
     z_shift = layer_height * 0.5
     logging.info("Starting G-code processing")
@@ -112,7 +112,7 @@ def process_gcode(input_file, layer_height, extrusion_multiplier):
                         line += f" ; Adjusted E for last layer, block #{perimeter_block_count}\n"
                     else: 
                         new_e_value = e_value * extrusion_multiplier
-                        logging.info(f"Multiplying E value by extrusionMultiplier")
+                        #logging.info(f"Multiplying E value by extrusionMultiplier")
                         line = re.sub(r'E[-\d.]+', f'E{new_e_value:.5f}', line).strip()
                         line += f" ; Adjusted E for extrusionMultiplier, block #{perimeter_block_count}\n"
 						
